@@ -9,7 +9,7 @@ Employees can request vacation days, and the system automatically calculates:
 - Leave approval status based on company policies.
 - Payout for unused or extra leave days, if applicable.
 
-This project is built using **Nest.js** for the backend, **Prisma** as the ORM, and **PostgreSQL** as the primary database.
+This project is built using **Nest.js** for the backend, TypeOrm as the ORM, and **PostgreSQL** as the primary database.
 
 The system aims to streamline HR processes, reduce manual work, and maintain a transparent leave history for employees and administrators.
 
