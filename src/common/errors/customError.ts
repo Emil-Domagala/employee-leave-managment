@@ -1,4 +1,7 @@
-import { ErrorsArr } from '../utils/validateBodyValue';
+export type ErrorsArr = {
+  message: string;
+  field: string;
+}[];
 
 export abstract class CustomError extends Error {
   abstract statusCode: number;
@@ -13,12 +16,12 @@ export abstract class CustomError extends Error {
    * {
    *   status: number;
    *   message: string;
-   *   fields?: ErrorsArr[];
+   *   fields?: ErrorsArr;
    * }
    */
   abstract serializeErrors(): {
     status: number;
     message: string;
-    fields?: ErrorsArr[];
+    fields?: ErrorsArr;
   };
 }

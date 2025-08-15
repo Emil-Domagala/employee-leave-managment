@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { login } from './login/login.service';
-import { refreshToken } from './refreshToken/refreshToken.service';
 import { logout } from './logout/logout.service';
+import { login } from './login/login.controller';
+import { refreshToken } from './refreshToken/refreshToken.controller';
 
 const authRouter = Router();
 
