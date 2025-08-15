@@ -9,6 +9,6 @@ export class InternalServerError extends CustomError {
     Object.setPrototypeOf(this, InternalServerError.prototype);
   }
   serializeErrors() {
-    return [{ message: 'Internal server error' }];
+    return { status: this.statusCode, message: 'Internal server error' };
   }
 }
