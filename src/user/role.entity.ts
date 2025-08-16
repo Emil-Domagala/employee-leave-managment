@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
-import { AppDataSource } from '../data-source';
 
 export enum UserRole {
   EMPLOYEE = 'employee',
@@ -19,5 +18,3 @@ export class Role {
   @OneToMany(() => User, (user) => user.role)
   users!: User[];
 }
-
-

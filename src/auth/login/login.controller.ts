@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { validateBody } from '../../common/utils/validateBody';
 import { CookieHelper } from '../../common/utils/cookieHelper';
-import { AuthService } from './login.service';
+import { LoginService } from './login.service';
 import { LoginInput, loginSchema } from './domains/loginBody.dto';
+import { AppDataSource } from '../../data-source';
+import { User } from '../../user/user.entity';
 
-const authService = new AuthService();
+const loginService = new LoginService(AppDataSource.getRepository(User));
 
 export const login = async (
   req: Request,
@@ -13,7 +15,7 @@ export const login = async (
 ) => {
   try {
     const { email, password } = validateBody<LoginInput>(req.body, loginSchema);
-    const { authToken, refreshToken } = await authService.login(
+    const { authToken, refreshToken } = await loginService.login(
       email,
       password,
     );
@@ -21,7 +23,7 @@ export const login = async (
     CookieHelper.setAuthCookie(res, authToken);
     CookieHelper.setRefreshCookie(res, refreshToken);
 
-    res.status(200);
+    res.status(200).json({ message: 'login successful' });
   } catch (err) {
     next(err);
   }

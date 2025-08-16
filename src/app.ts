@@ -16,7 +16,7 @@ app.use(cookieParser());
 const routes = express.Router();
 app.use(routes);
 
-app.use('/api', authRouter);
+app.use('/api/auth/', authRouter);
 
 // Error handling
 

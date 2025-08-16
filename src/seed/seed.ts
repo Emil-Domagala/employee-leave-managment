@@ -15,7 +15,7 @@ export const seedRoles = async () => {
       console.log(`Role ${roleName} already exists`);
     }
   }
-  console.log('Roles seeded ✅');
+  console.log('Roles seeded');
 };
 
 export const seedAdmin = async () => {

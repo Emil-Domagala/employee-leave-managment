@@ -4,7 +4,7 @@ import {
 } from '../../common/jwt/utils/jwtTokens';
 import { UnauthorizedError } from '../errors/unauthorizedError';
 
-export class AuthService {
+export class RefreshTokenService {
   refreshToken(refreshToken: string) {
     if (!refreshToken) throw new UnauthorizedError();
 

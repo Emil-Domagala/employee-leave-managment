@@ -34,6 +34,6 @@ export const createUser = async (
     role,
     ...overrides,
   });
-
-  return await UserRepo.save(user);
+  const savedUser = await UserRepo.save(user);
+  return savedUser;
 };

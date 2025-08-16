@@ -1,16 +1,7 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createUser } from './createUserFactory';
-import { startTestDB, stopTestDB } from '../setupTestDB';
 
 describe('createTestUser', () => {
-  beforeAll(async () => {
-    await startTestDB();
-  });
-
-  afterAll(async () => {
-    await stopTestDB();
-  });
-
   it('should create a user with role employee', async () => {
     const user = await createUser();
     expect(user.id).toBeDefined();
