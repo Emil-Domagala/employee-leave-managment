@@ -13,6 +13,11 @@ declare module 'express-serve-static-core' {
   }
 }
 
+/**
+ * Check if user has valid session
+ *
+ * @throws {SessionInvalidError} If user does not have valid session
+ */
 export const requireAuth = async (
   req: Request,
   _res: Response,

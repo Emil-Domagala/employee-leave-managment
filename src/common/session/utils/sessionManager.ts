@@ -23,7 +23,7 @@ export class SessionManager {
   public async createSession(userId: number, email: string): Promise<string> {
     const token = this.generateToken();
     const sessionData: SessionData = { userId, email };
-  
+
     await redisClient.setEx(
       token,
       this.expirationSeconds,
@@ -34,14 +34,13 @@ export class SessionManager {
 
   /**
    * Verify session token and extend expiration TTL
+   * @throws {SessionInvalidError} If user does not have valid session
    */
   public async verifyAndExtendSession(token: string): Promise<SessionData> {
     const sessionJson = await redisClient.getEx(token, {
       EX: this.expirationSeconds,
     });
-    if (!sessionJson) {
-      throw new SessionInvalidError();
-    }
+    if (!sessionJson) throw new SessionInvalidError();
 
     const sessionData = JSON.parse(sessionJson) as SessionData;
     return sessionData;
@@ -60,6 +59,4 @@ export class SessionManager {
   private generateToken(): string {
     return crypto.randomBytes(32).toString('hex');
   }
-
-
 }

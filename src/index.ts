@@ -2,7 +2,7 @@ import './env';
 import 'reflect-metadata';
 
 import app from './app';
-import { AppDataSource } from './data-source';
+import { AppDataSource } from './dataSource';
 import { getEnvNumber } from './common/utils/getEnv';
 import { seedAdmin, seedRoles } from './seed/seed';
 import redisClient from './redisClient';

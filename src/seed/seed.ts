@@ -1,5 +1,5 @@
 import { PasswordManager } from '../common/utils/passwordManager';
-import { AppDataSource } from '../data-source';
+import { AppDataSource } from '../dataSource';
 import { Role, UserRole } from '../user/role.entity';
 import { User } from '../user/user.entity';
 

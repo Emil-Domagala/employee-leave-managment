@@ -2,6 +2,10 @@ import { ZodType } from 'zod';
 import { ErrorsArr } from '../errors/customError';
 import { MethodArgumentNotValidError } from '../errors/methodArgumentNotValidError';
 
+/**
+ * Validates body against provided schema
+ * @throws {MethodArgumentNotValidError} if body is not correct
+ */
 export const validateBody = <T>(body: unknown, schema: ZodType<T>): T => {
   const res = schema.safeParse(body);
 

@@ -5,7 +5,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { NotFoundError } from './common/errors/notFoundError';
 import { errorHandler } from './errorHandler';
-import authRouter from './auth/authRouter';
+import authRouter from './auth/auth.router';
 
 const app = express();
 app.set('trust proxy', true);

@@ -1,6 +1,8 @@
 import { CustomError } from '../../errors/customError';
 
-// Auth token missing
+/*
+* Custom error used when session is invalid. returns 401
+*/
 export class SessionInvalidError extends CustomError {
   statusCode = 401;
   constructor() {

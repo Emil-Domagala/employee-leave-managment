@@ -13,7 +13,7 @@ export const errorHandler = (
     return;
   }
 
-  console.log(err);
+  console.error(err);
   const defaultError = new InternalServerError();
   res
     .status(defaultError.statusCode)
