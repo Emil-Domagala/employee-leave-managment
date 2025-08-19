@@ -1,11 +1,9 @@
 import { User } from '../../user/user.entity';
 import { PasswordManager } from '../../common/utils/passwordManager';
-import {
-  createAuthToken,
-  createRefreshToken,
-} from '../../common/jwt/utils/jwtTokens';
+
 import { LoginFailedError } from '../errors/loginFailedError';
 import { Repository } from 'typeorm';
+import { SessionManager } from '../../common/session/utils/sessionManager';
 
 export class LoginService {
   constructor(private userRepo: Repository<User>) {}
@@ -21,15 +19,13 @@ export class LoginService {
     );
     if (!isPasswordValid) throw new LoginFailedError();
 
-    const authToken = createAuthToken({
-      email: user.email,
-      userId: user.id,
-    });
-    const refreshToken = createRefreshToken({
-      email: user.email,
-      userId: user.id,
-    });
+    const sessionManager = new SessionManager();
 
-    return { authToken, refreshToken };
+    const sessionToken = await sessionManager.createSession(
+      user.id,
+      user.email,
+    );
+
+    return { sessionToken };
   }
 }

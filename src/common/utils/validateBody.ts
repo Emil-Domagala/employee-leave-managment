@@ -1,6 +1,6 @@
 import { ZodType } from 'zod';
 import { ErrorsArr } from '../errors/customError';
-import { MethodArgumentNotValidError } from '../errors/MethodArgumentNotValidError';
+import { MethodArgumentNotValidError } from '../errors/methodArgumentNotValidError';
 
 export const validateBody = <T>(body: unknown, schema: ZodType<T>): T => {
   const res = schema.safeParse(body);

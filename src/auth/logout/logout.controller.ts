@@ -7,8 +7,8 @@ export const logout = async (
   next: NextFunction,
 ) => {
   try {
-    CookieHelper.clearAuthCookie(res);
-    CookieHelper.clearRefreshCookie(res);
+    const cookieHelper = new CookieHelper();
+    cookieHelper.clearSessionCookie(res);
 
     res.status(200).json({ message: 'logout successful' });
   } catch (err) {

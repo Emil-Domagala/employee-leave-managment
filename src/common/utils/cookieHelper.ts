@@ -1,45 +1,52 @@
 import { Response } from 'express';
 import { getEnvNumber, getEnvString } from './getEnv';
 
+type CookieOptions = {
+  domain: string;
+  secure: boolean;
+  httpOnly: boolean;
+  sameSite: 'lax';
+  maxAge: number;
+};
+
 export class CookieHelper {
-  private static baseCookieOptions(maxAge: number) {
-    const DOMAIN = getEnvString('FRONTEND_DOMAIN'); // moved here
-    const NODE_ENV = getEnvString('NODE_ENV'); // moved here
+  private baseCookieOptions(maxAge: number): CookieOptions {
+    const DOMAIN = getEnvString('FRONTEND_DOMAIN') || '';
+    const NODE_ENV = getEnvString('NODE_ENV') || 'development';
     return {
       domain: DOMAIN,
       secure: NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: 'lax' as const,
+      sameSite: 'lax',
       maxAge,
     };
   }
 
-  static setAuthCookie(res: Response, token: string) {
-    const maxAge = getEnvNumber('AUTH_TOKEN_EXPIRATION');
-    const name = getEnvString('AUTH_COOKIE');
-    res.cookie(name, token, { ...this.baseCookieOptions(maxAge), path: '/' });
+  public setSessionCookie(res: Response, token: string) {
+    const maxAge = getEnvNumber('SESSION_EXPIRATION_SEC');
+    const name = getEnvString('SESSION_COOKIE_NAME');
+    res.cookie(name, token, {
+      ...this.baseCookieOptions(maxAge * 1000),
+      path: '/',
+    });
   }
 
-  static setRefreshCookie(res: Response, token: string) {
-    const maxAge = getEnvNumber('REFRESH_TOKEN_EXPIRATION');
-    const name = getEnvString('REFRESH_COOKIE');
-    res.cookie(name, token, { ...this.baseCookieOptions(maxAge), path: '/' });
+  public clearSessionCookie(res: Response) {
+    const name = getEnvString('SESSION_COOKIE_NAME');
+    res.clearCookie(name, {
+      path: '/',
+      domain: getEnvString('FRONTEND_DOMAIN') || '',
+    });
   }
 
-  static clearAuthCookie(res: Response) {
-    const name = getEnvString('AUTH_COOKIE');
-    res.clearCookie(name);
+  public clearCookies(res: Response, name: string, path = '/') {
+    res.clearCookie(name, {
+      path,
+      domain: getEnvString('FRONTEND_DOMAIN'),
+    });
   }
 
-  static clearRefreshCookie(res: Response) {
-    const name = getEnvString('REFRESH_COOKIE');
-    res.clearCookie(name);
-  }
-
-  static clearCookies(res: Response, name: string) {
-    res.clearCookie(name);
-  }
-  static setCookies(
+  public setCookies(
     res: Response,
     name: string,
     value: string,

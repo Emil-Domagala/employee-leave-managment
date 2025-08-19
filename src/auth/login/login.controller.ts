@@ -15,13 +15,10 @@ export const login = async (
 ) => {
   try {
     const { email, password } = validateBody<LoginInput>(req.body, loginSchema);
-    const { authToken, refreshToken } = await loginService.login(
-      email,
-      password,
-    );
+    const { sessionToken } = await loginService.login(email, password);
 
-    CookieHelper.setAuthCookie(res, authToken);
-    CookieHelper.setRefreshCookie(res, refreshToken);
+    const cookieHelper = new CookieHelper();
+    cookieHelper.setSessionCookie(res, sessionToken);
 
     res.status(200).json({ message: 'login successful' });
   } catch (err) {
