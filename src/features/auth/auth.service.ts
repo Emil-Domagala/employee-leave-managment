@@ -1,14 +1,12 @@
-import { User } from '../user/user.entity';
-import { PasswordManager } from '../common/utils/passwordManager';
-
+import { PasswordManager } from '../../common/utils/passwordManager';
 import { LoginFailedError } from './errors/loginFailedError';
-import { Repository } from 'typeorm';
-import { SessionManager } from '../common/session/utils/sessionManager';
+import { UsersRepository } from '../users/user/user.repo';
+import { SessionManager } from '../../common/session/utils/sessionManager';
 
 export class AuthService {
   constructor(
-    private userRepo: Repository<User>,
-    private sessionManager: SessionManager = new SessionManager(),
+    private userRepo: UsersRepository,
+    private sessionManager: SessionManager,
   ) {}
 
   /**
@@ -17,7 +15,7 @@ export class AuthService {
    * @throws {LoginFailedError} If user does not exist or password is invalid.
    */
   async login(email: string, password: string) {
-    const user = await this.userRepo.findOne({ where: { email } });
+    const user = await this.userRepo.getByEmail(email);
 
     if (!user) throw new LoginFailedError();
 

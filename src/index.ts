@@ -2,19 +2,22 @@ import './env';
 import 'reflect-metadata';
 
 import app from './app';
-import { AppDataSource } from './dataSource';
+
 import { getEnvNumber } from './common/utils/getEnv';
-import { seedAdmin, seedRoles } from './seed/seed';
-import redisClient from './redisClient';
+import redisClient from './config/redisClient';
+import { applySchema, populateDB, testConnection } from './config/db';
 
 const start = async () => {
   const PORT = getEnvNumber('PORT');
 
   try {
-    await AppDataSource.initialize();
+    // main db
+    await testConnection();
+    await applySchema();
+    await populateDB();
+
+    // redis
     await redisClient.connect();
-    await seedRoles();
-    await seedAdmin();
     console.log('Data Source has been initialized!');
   } catch (err) {
     console.error('Error during Data Source initialization:', err);

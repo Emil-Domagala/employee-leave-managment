@@ -1,10 +1,10 @@
 import crypto from 'crypto';
-import redisClient from '../../../redisClient';
 import { getEnvNumber, getEnvString } from '../../utils/getEnv';
 import { SessionInvalidError } from '../errors/sessionInvalidError';
+import { RedisClientType } from 'redis';
 
 interface SessionData {
-  userId: number;
+  userId: string;
   email: string;
 }
 
@@ -12,7 +12,7 @@ export class SessionManager {
   private expirationSeconds: number;
   public cookieName: string;
 
-  constructor() {
+  constructor(private redisClient: RedisClientType<any>) {
     this.expirationSeconds = getEnvNumber('SESSION_EXPIRATION_SEC');
     this.cookieName = getEnvString('SESSION_COOKIE_NAME');
   }
@@ -20,11 +20,11 @@ export class SessionManager {
   /**
    * Create a new session in Redis with expiration
    */
-  public async createSession(userId: number, email: string): Promise<string> {
+  public async createSession(userId: string, email: string): Promise<string> {
     const token = this.generateToken();
     const sessionData: SessionData = { userId, email };
 
-    await redisClient.setEx(
+    await this.redisClient.setEx(
       token,
       this.expirationSeconds,
       JSON.stringify(sessionData),
@@ -37,7 +37,7 @@ export class SessionManager {
    * @throws {SessionInvalidError} If user does not have valid session
    */
   public async verifyAndExtendSession(token: string): Promise<SessionData> {
-    const sessionJson = await redisClient.getEx(token, {
+    const sessionJson = await this.redisClient.getEx(token, {
       EX: this.expirationSeconds,
     });
     if (!sessionJson) throw new SessionInvalidError();
@@ -50,7 +50,7 @@ export class SessionManager {
    * Delete session token (logout)
    */
   public async deleteSession(token: string): Promise<void> {
-    await redisClient.del(token);
+    await this.redisClient.del(token);
   }
 
   /**

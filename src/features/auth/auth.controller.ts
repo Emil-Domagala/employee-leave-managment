@@ -1,17 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateBody } from '../common/utils/validateBody';
-import { CookieHelper } from '../common/utils/cookieHelper';
+import { validateBody } from '../../common/utils/validateBody';
+import { CookieHelper } from '../../common/utils/cookieHelper';
 import { AuthService } from './auth.service';
 import { LoginInput, loginSchema } from './domains/loginBody.dto';
-import { AppDataSource } from '../dataSource';
-import { User } from '../user/user.entity';
+import { UsersRepository } from '../users/user/user.repo';
+import { SessionManager } from '../../common/session/utils/sessionManager';
+import { RedisClientType } from 'redis';
+import { Pool } from 'pg';
 
 export class AuthController {
   private authService: AuthService;
   private cookieHelper: CookieHelper;
 
-  constructor() {
-    this.authService = new AuthService(AppDataSource.getRepository(User));
+  constructor(pgPool: Pool, redisClient: RedisClientType<any>) {
+    this.authService = new AuthService(
+      new UsersRepository(pgPool),
+      new SessionManager(redisClient),
+    );
     this.cookieHelper = new CookieHelper();
 
     this.login = this.login.bind(this);

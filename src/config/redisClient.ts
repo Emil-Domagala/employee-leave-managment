@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import { getEnvString } from './common/utils/getEnv';
+import { getEnvString } from '../common/utils/getEnv';
 
 const redisClient = createClient({
   url: getEnvString('REDIS_URL'),
