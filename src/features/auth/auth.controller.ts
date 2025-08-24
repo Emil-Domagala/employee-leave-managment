@@ -3,22 +3,14 @@ import { validateBody } from '../../common/utils/validateBody';
 import { CookieHelper } from '../../common/utils/cookieHelper';
 import { AuthService } from './auth.service';
 import { LoginInput, loginSchema } from './domains/loginBody.dto';
-import { UsersRepository } from '../users/user/user.repo';
 import { SessionManager } from '../../common/session/utils/sessionManager';
-import { RedisClientType } from 'redis';
-import { Pool } from 'pg';
 
 export class AuthController {
-  private authService: AuthService;
-  private cookieHelper: CookieHelper;
-
-  constructor(pgPool: Pool, redisClient: RedisClientType<any>) {
-    this.authService = new AuthService(
-      new UsersRepository(pgPool),
-      new SessionManager(redisClient),
-    );
-    this.cookieHelper = new CookieHelper();
-
+  constructor(
+    private authService: AuthService,
+    private cookieHelper: CookieHelper,
+    private sessionManager: SessionManager,
+  ) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -39,8 +31,11 @@ export class AuthController {
     }
   }
 
-  logout(_req: Request, res: Response, next: NextFunction) {
+  async logout(req: Request, res: Response, next: NextFunction) {
     try {
+      const token = req.cookies[this.sessionManager.cookieName];
+
+      await this.authService.logout(token);
       this.cookieHelper.clearSessionCookie(res);
 
       res.status(200).json({ message: 'logout successful' });

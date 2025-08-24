@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { SessionManager } from '../utils/sessionManager';
 import { SessionInvalidError } from '../errors/sessionInvalidError';
+import redisClient from '../../../config/redisClient';
+import { RedisClientType } from 'redis';
 
-const sessionManager = new SessionManager();
+const sessionManager = new SessionManager(redisClient as RedisClientType);
 
 declare module 'express-serve-static-core' {
   interface Request {
     user?: {
       email: string;
-      userId: number;
+      userId: string;
     };
   }
 }

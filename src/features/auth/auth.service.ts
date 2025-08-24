@@ -32,4 +32,13 @@ export class AuthService {
 
     return { sessionToken };
   }
+  /**
+   *
+   * Deletes session in redis if token availble in cookie
+   */
+  async logout(sessionToken?: string) {
+    if (sessionToken) {
+      await this.sessionManager.deleteSession(sessionToken);
+    }
+  }
 }

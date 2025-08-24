@@ -8,6 +8,15 @@ interface SessionData {
   email: string;
 }
 
+function isSessionData(data: unknown): data is SessionData {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'userId' in data &&
+    'email' in data
+  );
+}
+
 export class SessionManager {
   private expirationSeconds: number;
   public cookieName: string;
@@ -42,8 +51,11 @@ export class SessionManager {
     });
     if (!sessionJson) throw new SessionInvalidError();
 
-    const sessionData = JSON.parse(sessionJson) as SessionData;
-    return sessionData;
+    const parsedData: unknown = JSON.parse(sessionJson);
+
+    if (!isSessionData(parsedData)) throw new SessionInvalidError();
+
+    return parsedData;
   }
 
   /**
