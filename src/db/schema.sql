@@ -28,14 +28,14 @@ END $$;
 -- Tables
 CREATE TABLE IF NOT EXISTS roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name role_name NOT NULL UNIQUE -- ✅ Needed for ON CONFLICT (name)
+    name role_name NOT NULL UNIQUE 
 );
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE, -- ✅ Needed for ON CONFLICT (email)
+    email VARCHAR(100) NOT NULL UNIQUE, 
     salary DECIMAL(10,2) NOT NULL,
     role_id UUID REFERENCES roles(id),
     status user_status NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS leave_types (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(50) NOT NULL UNIQUE, -- ✅ Needed for ON CONFLICT (name)
+    name VARCHAR(50) NOT NULL UNIQUE, 
     is_paid BOOLEAN NOT NULL,
     annual_allowance INT NOT NULL
 );
@@ -56,24 +56,22 @@ CREATE TABLE IF NOT EXISTS leave_balances (
     year INT NOT NULL,
     days_allocated INT NOT NULL,
     days_taken INT NOT NULL,
-    days_remaining INT NOT NULL,
-    UNIQUE(employee_id, leave_type_id, year) -- ✅ ON CONFLICT DO NOTHING works here
+    UNIQUE(employee_id, leave_type_id, year) 
 );
 
-CREATE TABLE IF NOT EXISTS leave_request (
+CREATE TABLE IF NOT EXISTS leave_requests (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     employee_id UUID REFERENCES users(id),
     leave_type_id UUID REFERENCES leave_types(id),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    total_days INT NOT NULL,
     status leave_status NOT NULL,
     approver_id UUID REFERENCES users(id),
     request_date TIMESTAMP NOT NULL DEFAULT now(),
     decision_date TIMESTAMP NULL
 );
 
-CREATE TABLE IF NOT EXISTS compensation_history (
+CREATE TABLE IF NOT EXISTS compensations_history (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
     effective_from DATE NOT NULL,
