@@ -2,18 +2,16 @@ import crypto from 'crypto';
 import { getEnvNumber, getEnvString } from '../../utils/getEnv';
 import { SessionInvalidError } from '../errors/sessionInvalidError';
 import { RedisClientType } from 'redis';
+import { CreateUserSesion } from './createSession.interface';
 
-interface SessionData {
-  userId: string;
-  email: string;
-}
 
-function isSessionData(data: unknown): data is SessionData {
+function isSessionData(data: unknown): data is CreateUserSesion {
   return (
     typeof data === 'object' &&
     data !== null &&
     'userId' in data &&
-    'email' in data
+    'email' in data &&
+    'role' in data
   );
 }
 
@@ -29,14 +27,13 @@ export class SessionManager {
   /**
    * Create a new session in Redis with expiration
    */
-  public async createSession(userId: string, email: string): Promise<string> {
+  public async createSession(data: CreateUserSesion): Promise<string> {
     const token = this.generateToken();
-    const sessionData: SessionData = { userId, email };
 
     await this.redisClient.setEx(
       token,
       this.expirationSeconds,
-      JSON.stringify(sessionData),
+      JSON.stringify(data),
     );
     return token;
   }
@@ -45,7 +42,7 @@ export class SessionManager {
    * Verify session token and extend expiration TTL
    * @throws {SessionInvalidError} If user does not have valid session
    */
-  public async verifyAndExtendSession(token: string): Promise<SessionData> {
+  public async verifyAndExtendSession(token: string): Promise<CreateUserSesion> {
     const sessionJson = await this.redisClient.getEx(token, {
       EX: this.expirationSeconds,
     });

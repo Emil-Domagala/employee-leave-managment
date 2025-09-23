@@ -9,7 +9,7 @@ END $$;
 
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_name') THEN
-        CREATE TYPE role_name AS ENUM ('manager','employee');
+        CREATE TYPE role_name AS ENUM ('manager','employee','administrator');
     END IF;
 END $$;
 
@@ -84,10 +84,10 @@ CREATE TABLE IF NOT EXISTS compensations_history (
 
 CREATE TABLE IF NOT EXISTS leave_payouts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    leave_request_id UUID UNIQUE REFERENCES leave_request(id),
+    leave_request_id UUID UNIQUE REFERENCES leave_requests(id),
     employee_id UUID REFERENCES users(id),
     calculated_on TIMESTAMP NOT NULL DEFAULT now(),
     amount DECIMAL(12,2) NOT NULL,
     currency CHAR(3) NOT NULL,
-    compensation_history_id UUID REFERENCES compensation_history(id)
+    compensation_history_id UUID REFERENCES compensations_history(id)
 );

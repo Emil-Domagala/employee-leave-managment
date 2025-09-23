@@ -18,4 +18,39 @@ export class PasswordManager {
   static async compare(password: string, hash: string): Promise<boolean> {
     return await bcrypt.compare(password, hash);
   }
+
+  /**
+   * Generates a random secure password.
+   * @param length Desired password length (default 12).
+   */
+  static generate(length: number = 12): string {
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const digits = '0123456789';
+    const symbols = '!@#$%^&*()-_=+[]{};:,.<>?';
+    const allChars = upper + lower + digits + symbols;
+
+    if (length < 8) {
+      throw new Error('Password length should be at least 8 characters');
+    }
+
+    // Ensure at least one of each type
+    const getRandom = (str: string) =>
+      str[Math.floor(Math.random() * str.length)];
+
+    let password = [
+      getRandom(upper),
+      getRandom(lower),
+      getRandom(digits),
+      getRandom(symbols),
+    ];
+
+    // Fill the rest
+    for (let i = password.length; i < length; i++) {
+      password.push(getRandom(allChars));
+    }
+
+    // Shuffle the password to avoid predictable pattern
+    return password.sort(() => Math.random() - 0.5).join('');
+  }
 }

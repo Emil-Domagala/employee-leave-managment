@@ -6,6 +6,7 @@ export async function seedUsersPassword() {
     { email: 'alice@example.com', password: 'password' },
     { email: 'bob@example.com', password: 'password' },
     { email: 'charlie@example.com', password: 'password' },
+    { email: 'test@test.test', password: 'password' },
   ];
 
   for (const u of users) {

@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { Role } from './role.entity';
+import { Role, RoleName } from './role.entity';
 
 export class RolesRepository {
   constructor(private pool: Pool) {}
@@ -11,7 +11,7 @@ export class RolesRepository {
     return rows[0] ?? null;
   }
 
-  async getByName(name: string): Promise<Role | null> {
+  async getByName(name: RoleName): Promise<Role | null> {
     const { rows } = await this.pool.query(
       'SELECT * FROM roles WHERE name = $1',
       [name],

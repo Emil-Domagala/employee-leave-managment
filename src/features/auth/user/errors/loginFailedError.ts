@@ -1,4 +1,4 @@
-import { CustomError } from '../../../common/errors/customError';
+import { CustomError } from '../../../../common/errors/customError';
 
 export class LoginFailedError extends CustomError {
   statusCode = 404;

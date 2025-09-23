@@ -1,9 +1,9 @@
 import { PasswordManager } from '../../common/utils/passwordManager';
 import { randomUUID } from 'crypto';
-import { User } from '../../features/users/user/user.entity';
-import { Role } from '../../features/users/role/role.entity';
-import { UsersRepository } from '../../features/users/user/user.repo';
-import { RolesRepository } from '../../features/users/role/role.repo';
+import { User } from '../../common/domains/users/user/user.entity';
+import { Role } from '../../common/domains/users/role/role.entity';
+import { UsersRepository } from '../../common/domains/users/user/user.repo';
+import { RolesRepository } from '../../common/domains/users/role/role.repo';
 import { EntityNotFoundError } from '../../common/errors/entityNotFoundError';
 
 export const createUser = async (

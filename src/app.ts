@@ -5,7 +5,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { NotFoundError } from './common/errors/notFoundError';
 import { errorHandler } from './errorHandler';
-import authRouter from './features/auth/auth.router';
+import authRouter from './features/auth/user/auth.router';
+import managerAuthRouter from './features/auth/manager/managerAuth.router';
 
 const app = express();
 app.set('trust proxy', true);
@@ -17,6 +18,7 @@ const routes = express.Router();
 app.use(routes);
 
 app.use('/api/auth/', authRouter);
+app.use('/api/auth/manager/', managerAuthRouter);
 
 // Error handling
 

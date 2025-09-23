@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateBody } from '../../common/utils/validateBody';
-import { CookieHelper } from '../../common/utils/cookieHelper';
+import { validateBody } from '../../../common/utils/validateBody';
+import { CookieHelper } from '../../../common/utils/cookieHelper';
+
+import { LoginBody, loginSchema } from './domains/loginBody.dto';
+import { SessionManager } from '../../../common/session/utils/sessionManager';
 import { AuthService } from './auth.service';
-import { LoginInput, loginSchema } from './domains/loginBody.dto';
-import { SessionManager } from '../../common/session/utils/sessionManager';
 
 export class AuthController {
   constructor(
@@ -17,7 +18,7 @@ export class AuthController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password } = validateBody<LoginInput>(
+      const { email, password } = validateBody<LoginBody>(
         req.body,
         loginSchema,
       );

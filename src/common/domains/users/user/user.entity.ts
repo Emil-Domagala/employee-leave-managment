@@ -5,6 +5,11 @@ export interface User {
   email: string;
   salary: number;
   role_id: string;
-  status: 'active' | 'inactive';
+  status: UserStatus;
   password: string;
+}
+
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
 }
