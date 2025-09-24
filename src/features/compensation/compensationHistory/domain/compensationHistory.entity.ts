@@ -4,7 +4,12 @@ export interface CompensationHistory {
   effective_from: Date;
   effective_to: Date | null;
   base_salary: number;
-  salary_period: 'monthly' | 'annual';
+  salary_period: SalaryPeriod;
   currency: string;
   created_at: Date;
+}
+
+export enum SalaryPeriod {
+  MONTHLY = 'monthly',
+  ANNUAL = 'annual',
 }

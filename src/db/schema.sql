@@ -31,14 +31,25 @@ CREATE TABLE IF NOT EXISTS roles (
     name role_name NOT NULL UNIQUE 
 );
 
+CREATE TABLE IF NOT EXISTS compensations_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
+    effective_from DATE NOT NULL,
+    effective_to DATE NULL,
+    base_salary DECIMAL(12,2) NOT NULL,
+    salary_period salary_period NOT NULL,
+    currency CHAR(3) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE, 
-    salary DECIMAL(10,2) NOT NULL,
     role_id UUID REFERENCES roles(id),
     status user_status NOT NULL,
+    compensation_history_id UUID REFERENCES compensations_history(id),
     password VARCHAR NOT NULL
 );
 
@@ -69,17 +80,6 @@ CREATE TABLE IF NOT EXISTS leave_requests (
     approver_id UUID REFERENCES users(id),
     request_date TIMESTAMP NOT NULL DEFAULT now(),
     decision_date TIMESTAMP NULL
-);
-
-CREATE TABLE IF NOT EXISTS compensations_history (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id),
-    effective_from DATE NOT NULL,
-    effective_to DATE NULL,
-    base_salary DECIMAL(12,2) NOT NULL,
-    salary_period salary_period NOT NULL,
-    currency CHAR(3) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS leave_payouts (
