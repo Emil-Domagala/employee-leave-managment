@@ -1,4 +1,3 @@
-import { O } from 'vitest/dist/chunks/reporters.d.BFLkQcL6';
 import { Role } from '../role/role.entity';
 
 export interface User {
@@ -8,7 +7,7 @@ export interface User {
   email: string;
   role_id: string;
   status: UserStatus;
-  compensation_history_id?: string;
+  salary: number;
   password: string;
 }
 
@@ -19,7 +18,4 @@ export enum UserStatus {
 
 export interface UserWithRole extends Omit<User, 'role_id'> {
   role: Role;
-}
-export interface UserWithSalary extends Omit<User, 'compensation_history_id'> {
-  salary: number;
 }

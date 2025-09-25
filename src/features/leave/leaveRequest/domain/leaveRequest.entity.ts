@@ -1,5 +1,5 @@
 import { User } from '../../../../common/domains/users/user/user.entity';
-import { LeaveType } from './leaveType/leaveType.entity';
+import { LeaveType } from '../leaveType/domain/leaveType.entity';
 
 export enum LeaveRequestStatus {
   Pending = 'pending',
