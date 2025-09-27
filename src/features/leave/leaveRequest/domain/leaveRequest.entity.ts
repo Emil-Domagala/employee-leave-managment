@@ -21,7 +21,10 @@ export interface LeaveRequestDto {
 }
 
 export interface CreateLeaveRequestDto
-  extends Omit<LeaveRequestDto, 'id' | 'status' | 'decision_date'> {}
+  extends Omit<
+    LeaveRequestDto,
+    'id' | 'status' | 'decision_date' | 'approver_id'
+  > {}
 
 export interface LeaveRequestWithTypeAndEmployee
   extends Omit<

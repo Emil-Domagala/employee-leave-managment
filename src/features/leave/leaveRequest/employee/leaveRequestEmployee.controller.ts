@@ -19,7 +19,11 @@ export class LeaveRequestsEmployeeController {
         req.body,
         createLeaveRequestSchema,
       );
-      res.status(200).json();
+      const newRequest = await this.service.createLeaveRequest(
+        body,
+        req.user!.userId,
+      );
+      res.status(201).json(newRequest);
     } catch (err) {
       next(err);
     }
@@ -30,7 +34,9 @@ export class LeaveRequestsEmployeeController {
     next: NextFunction,
   ) => {
     try {
-      res.status(200).json();
+      const response = await this.service.getLeaveRequests(req.user!.userId);
+
+      res.status(200).json(response);
     } catch (err) {
       next(err);
     }
@@ -42,7 +48,8 @@ export class LeaveRequestsEmployeeController {
   ) => {
     try {
       const { id } = req.params;
-      res.status(200).json();
+      const response = await this.service.getLeaveRequestById(id, req.user!.userId);
+      res.status(200).json(response);
     } catch (err) {
       next(err);
     }

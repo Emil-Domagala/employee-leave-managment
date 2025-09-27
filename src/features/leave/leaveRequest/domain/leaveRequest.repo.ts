@@ -113,4 +113,35 @@ export class LeaveRequestsRepository {
     const { rows } = await this.pool.query(sql, [employeeId]);
     return rows;
   }
+
+  async getUsedAllowance(userId: string, leaveTypeId: string): Promise<number> {
+    const sql = `
+      SELECT COUNT(*)::int AS used
+      FROM leave_requests
+      WHERE employee_id = $1
+        AND leave_type_id = $2
+        AND status = 'approved'
+    `;
+    const { rows } = await this.pool.query(sql, [userId, leaveTypeId]);
+    return rows[0]?.used ?? 0;
+  }
+
+  async hasOverlappingRequest(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<boolean> {
+    const sql = `
+      SELECT 1
+      FROM leave_requests
+      WHERE employee_id = $1
+        AND status IN ('pending', 'approved')
+        AND (
+          (start_date, end_date) OVERLAPS ($2, $3)
+        )
+      LIMIT 1
+    `;
+    const { rows } = await this.pool.query(sql, [userId, startDate, endDate]);
+    return rows.length > 0;
+  }
 }

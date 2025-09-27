@@ -5,9 +5,9 @@ import { CreateCompensationHistoryDto } from './dto/CreateCompensationHistory.dt
 export class CompensationHistoryService {
   constructor(private readonly repository: CompensationHistoryRepository) {}
 
-  async create(
+  create = async (
     data: CreateCompensationHistoryDto,
-  ): Promise<CompensationHistory> {
+  ): Promise<CompensationHistory> => {
     return this.repository.create(data);
-  }
+  };
 }

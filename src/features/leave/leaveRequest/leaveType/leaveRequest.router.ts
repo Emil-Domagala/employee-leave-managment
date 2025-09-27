@@ -19,12 +19,8 @@ const md = new AuthMiddleware(sessionManager);
 
 const router = Router();
 
-router.get('/leave-types', md.requireAuth, controller.getAllLeaveTypes);
-router.get('/leave-type/:id', md.requireAuth, controller.getLeaveTypeById);
-router.post(
-  '/leave-type',
-  md.requireRole(RoleName.MANAGER),
-  controller.createLeaveType,
-);
+router.get('/', md.requireAuth, controller.getAllLeaveTypes);
+router.get('/:id', md.requireAuth, controller.getLeaveTypeById);
+router.post('/', md.requireRole(RoleName.MANAGER), controller.createLeaveType);
 
 export default router;

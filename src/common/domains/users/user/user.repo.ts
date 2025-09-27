@@ -20,7 +20,11 @@ export class UsersRepository {
     return rows[0] ?? null;
   }
 
-  async create(u: Omit<User,'id'>): Promise<User> {
+  async deleteByEmail(email: string): Promise<void> {
+    await this.pool.query('DELETE FROM users WHERE email = $1', [email]);
+  }
+
+  async create(u: Omit<User, 'id'>): Promise<User> {
     const sql = `INSERT INTO users (first_name, last_name, email, salary, role_id, status, password)
                  VALUES ($1,$2,$3,$4,$5,$6,$7)
                  RETURNING *;`;
@@ -32,9 +36,14 @@ export class UsersRepository {
       u.salary,
       u.role_id,
       u.status,
-      u.password
+      u.password,
     ]);
     return rows[0];
   }
-}
 
+  async isUserActive(userId: string): Promise<boolean> {
+    const sql = `SELECT status FROM users WHERE id = $1`;
+    const { rows } = await this.pool.query(sql, [userId]);
+    return rows[0]?.status === 'active';
+  }
+}

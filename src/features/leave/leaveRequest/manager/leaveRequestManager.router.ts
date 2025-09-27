@@ -22,17 +22,17 @@ const md = new AuthMiddleware(sessionManager);
 const router = Router();
 
 router.patch(
-  '/leave-request/:id',
+  '/:id',
   md.requireRole(RoleName.MANAGER),
   controller.getLeaveRequestByIdManager,
 );
 router.get(
-  '/leave-requests',
+  '/',
   md.requireRole(RoleName.MANAGER),
   controller.getLeaveRequestsManager,
 );
 router.get(
-  '/leave-requests/:id',
+  '/:id',
   md.requireRole(RoleName.MANAGER),
   controller.updateLeaveRequest,
 );

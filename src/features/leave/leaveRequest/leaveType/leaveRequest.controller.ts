@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { LeaveTypesService } from './leaveRequest.service';
 import { EntityNotFoundError } from '../../../../common/errors/entityNotFoundError';
+import { validateBody } from '../../../../common/utils/validateBody';
+import {
+  CreateLeaveTypeBodyDto,
+  createLeaveTypeBodySchema,
+} from './dto/createLeaveTypeBody.dto';
 
 export class LeaveTypesController {
-  constructor(private leaveTypesService: LeaveTypesService) {}
+  constructor(private service: LeaveTypesService) {}
 
   getAllLeaveTypes = async (
     req: Request,
@@ -11,7 +16,7 @@ export class LeaveTypesController {
     next: NextFunction,
   ) => {
     try {
-      const leaveTypes = await this.leaveTypesService.getAllLeaveTypes();
+      const leaveTypes = await this.service.getAllLeaveTypes();
       res.status(200).json(leaveTypes);
     } catch (err) {
       next(err);
@@ -25,7 +30,7 @@ export class LeaveTypesController {
   ) => {
     try {
       const { id } = req.params;
-      const leaveType = await this.leaveTypesService.getLeaveTypeById(id);
+      const leaveType = await this.service.getLeaveTypeById(id);
       if (!leaveType) throw new EntityNotFoundError('Leave type not found');
       res.status(200).json(leaveType);
     } catch (err) {
@@ -34,7 +39,12 @@ export class LeaveTypesController {
   };
   createLeaveType = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.status(200).json();
+      const body = validateBody<CreateLeaveTypeBodyDto>(
+        req.body,
+        createLeaveTypeBodySchema,
+      );
+      const newLT = await this.service.createLeaveType(body);
+      res.status(201).json(newLT);
     } catch (err) {
       next(err);
     }

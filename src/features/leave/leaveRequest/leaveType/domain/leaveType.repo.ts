@@ -40,4 +40,15 @@ export class LeaveTypesRepository {
     );
     return rows[0] ?? null;
   }
+
+  async getLeaveTypeById(id: string): Promise<{
+    id: string;
+    name: string;
+    is_paid: boolean;
+    annual_allowance: number;
+  } | null> {
+    const sql = `SELECT * FROM leave_types WHERE id = $1`;
+    const { rows } = await this.pool.query(sql, [id]);
+    return rows[0] ?? null;
+  }
 }
