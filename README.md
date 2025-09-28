@@ -73,11 +73,40 @@ The project provides a user-friendly interface for employees and managers, along
 
 1. **Clone the repository**
 
+```bash
+git clone https://github.com/Emil-Domagala/employee-leave-managment.git employee-leave-management
+cd employee-leave-management
+```
+
 2. **Install dependencies**
+
+```bash
+npm install
+```
 
 3. **Run the application with Docker Compose**
 
+```bash
+cd dev-docker && docker compose up -d --build
+```
+
 4. **Run the app locally in development mode**
+
+```bash
+npm run dev
+```
+
+5. Alternative: spin everything in Docker via npm
+
+```bash
+npm run docker:up
+```
+
+and stop vis
+
+```bash
+npm run docker:down
+```
 
 ---
 
@@ -95,4 +124,4 @@ npm run test
 
 ## Database Schema
 
-he database schema is visualized in the [doc](./doc/dbSchema.png) file
+he database schema is visualized in the [schema](./doc/dbSchema.png) file

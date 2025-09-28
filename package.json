@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "node --watch --import tsx src/index.ts",
     "start": "node --import tsx src/index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down -v"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

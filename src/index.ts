@@ -5,7 +5,8 @@ import app from './app';
 
 import { getEnvNumber } from './common/utils/getEnv';
 import redisClient from './config/redisClient';
-import { applySchema, populateDB, testConnection } from './config/db';
+import { applySchema, testConnection } from './config/db';
+import { seedAdmin } from './db/seedAdmin';
 
 const start = async () => {
   const PORT = getEnvNumber('PORT');
@@ -14,7 +15,7 @@ const start = async () => {
     // main db
     await testConnection();
     await applySchema();
-    await populateDB();
+    await seedAdmin();
 
     // redis
     await redisClient.connect();

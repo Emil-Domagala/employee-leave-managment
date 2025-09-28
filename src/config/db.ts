@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { seedUsersPassword } from '../db/seedUsersPassword';
+import { seedAdmin } from '../db/seedAdmin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,17 +54,4 @@ export const applySchema = async () => {
   const sql = fs.readFileSync(schemaPath, 'utf-8');
   await pool.query(sql);
   console.log('Schema applied');
-};
-
-export const populateDB = async () => {
-  if (process.env.NODE_ENV !== 'production') {
-    const pool = getPool();
-    const initPath = path.join(__dirname, '../db/init.sql');
-    const sql = fs.readFileSync(initPath, 'utf-8');
-    await pool.query(sql);
-    await seedUsersPassword();
-    console.log('Init data applied (DEV ONLY)');
-  } else {
-    console.log('Skipping init data in production');
-  }
 };
