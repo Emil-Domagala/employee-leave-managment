@@ -26,10 +26,10 @@ export class LeaveRequestsRepository {
       lr.leave_type_id,
       lr.start_date,
       lr.end_date,
-      LeaveRequestStatus.Pending,
-      null,
-      lr.request_date,
-      null,
+      lr.status ?? LeaveRequestStatus.Pending,
+      lr.approver_id ?? null,
+      lr.request_date ?? new Date(),
+      lr.decision_date ?? null,
     ]);
     return rows[0];
   }
@@ -143,5 +143,9 @@ export class LeaveRequestsRepository {
     `;
     const { rows } = await this.pool.query(sql, [userId, startDate, endDate]);
     return rows.length > 0;
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await this.pool.query('DELETE FROM leave_requests WHERE id = $1', [id]);
   }
 }

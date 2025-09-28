@@ -3,6 +3,8 @@ import { LoginFailedError } from './errors/loginFailedError';
 import { UsersRepository } from '../../../common/domains/users/user/user.repo';
 import { SessionManager } from '../../../common/session/utils/sessionManager';
 import { RolesRepository } from '../../../common/domains/users/role/role.repo';
+import { UserStatus } from '../../../common/domains/users/user/user.entity';
+import { UserInactiveError } from './errors/UserInactiveError';
 
 export class AuthService {
   constructor(
@@ -20,6 +22,8 @@ export class AuthService {
     const user = await this.userRepo.getByEmail(email);
 
     if (!user) throw new LoginFailedError();
+    if (user.status !== UserStatus.ACTIVE) throw new UserInactiveError();
+
     const role = await this.roleRepo.getById(user.role_id);
     if (!role) throw new LoginFailedError();
 

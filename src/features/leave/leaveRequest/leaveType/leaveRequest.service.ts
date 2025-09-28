@@ -2,6 +2,7 @@ import { EntityNotFoundError } from '../../../../common/errors/entityNotFoundErr
 import { LeaveType } from './domain/leaveType.entity';
 import { LeaveTypesRepository } from './domain/leaveType.repo';
 import { CreateLeaveTypeBodyDto } from './dto/createLeaveTypeBody.dto';
+import { LeaveTypeAlreadyExistsError } from './errors/leaveTypeAlreadyExistsError';
 
 export class LeaveTypesService {
   constructor(private leaveTypesRepo: LeaveTypesRepository) {}
@@ -19,7 +20,7 @@ export class LeaveTypesService {
     data: CreateLeaveTypeBodyDto,
   ): Promise<LeaveType> => {
     const existing = await this.leaveTypesRepo.getByName(data.name);
-    if (existing) throw new Error('Leave type already exists');
+    if (existing) throw new LeaveTypeAlreadyExistsError();
     return this.leaveTypesRepo.create(data);
   };
 }

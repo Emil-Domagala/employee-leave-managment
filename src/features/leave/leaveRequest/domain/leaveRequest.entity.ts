@@ -20,11 +20,17 @@ export interface LeaveRequestDto {
   decision_date: Date | null;
 }
 
-export interface CreateLeaveRequestDto
-  extends Omit<
-    LeaveRequestDto,
-    'id' | 'status' | 'decision_date' | 'approver_id'
-  > {}
+export interface CreateLeaveRequestDto {
+  employee_id: string;
+  leave_type_id: string;
+  start_date: Date;
+  end_date: Date;
+  request_date: Date;
+
+  status?: LeaveRequestStatus;
+  approver_id?: string | null;
+  decision_date?: Date | null;
+}
 
 export interface LeaveRequestWithTypeAndEmployee
   extends Omit<

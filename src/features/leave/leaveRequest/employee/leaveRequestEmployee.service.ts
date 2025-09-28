@@ -1,9 +1,11 @@
-import is from 'zod/v4/locales/is.cjs';
 import { UsersRepository } from '../../../../common/domains/users/user/user.repo';
 import { EntityNotFoundError } from '../../../../common/errors/entityNotFoundError';
 import { CreateLeaveRequestBody } from '../domain/dto/createLeaveRequestBody.dto';
 import { LeaveRequestsRepository } from '../domain/leaveRequest.repo';
 import { LeaveTypesRepository } from '../leaveType/domain/leaveType.repo';
+import { NotEnoughAllowanceError } from './errors/NotEnoughAllowanceError';
+import { OverlappingLeaveRequestError } from './errors/overlappingLeaveRequestError';
+import { UserNotActiveError } from './errors/userNotActiveError';
 
 export class LeaveRequestsEmployeeService {
   constructor(
@@ -19,10 +21,12 @@ export class LeaveRequestsEmployeeService {
       await this.leaveTypeRepo.getById(data.leave_type_id),
     ]);
 
-    if (!isActive) throw new Error('User is not active');
+    if (!isActive) throw new UserNotActiveError('User is not active');
 
     if (hasOverlappingRequest)
-      throw new Error('You have overlapping leave request');
+      throw new OverlappingLeaveRequestError(
+        'You have overlapping leave request',
+      );
 
     if (!leaveType) throw new EntityNotFoundError('Leave type not found');
 
@@ -31,7 +35,8 @@ export class LeaveRequestsEmployeeService {
       data.leave_type_id,
     );
 
-    if (usedAllowance === null) throw new Error('Cannot get used allowance');
+    if (usedAllowance === null)
+      throw new EntityNotFoundError('Cannot get used allowance');
 
     const requestedDays =
       (new Date(data.end_date).getTime() -
@@ -40,7 +45,9 @@ export class LeaveRequestsEmployeeService {
       1;
 
     if (requestedDays > leaveType.annual_allowance - usedAllowance)
-      throw new Error('You do not have enough allowance for this leave type');
+      throw new NotEnoughAllowanceError(
+        'You do not have enough allowance for this leave type',
+      );
 
     const lr = await this.repo.create({
       employee_id: userId,
@@ -59,7 +66,8 @@ export class LeaveRequestsEmployeeService {
   getLeaveRequestById = async (id: string, userId: string) => {
     const lr = await this.repo.getById(id);
     if (!lr) throw new EntityNotFoundError('Leave request not found');
-    if (lr.employee_id !== userId) throw new Error('Leave request not found');
+    if (lr.employee_id !== userId)
+      throw new EntityNotFoundError('Leave request not found');
     return lr;
   };
 }

@@ -16,6 +16,23 @@ export interface TestContainers {
   redisClient: RedisClientType;
 }
 
+const executeWithRetry = async (
+  pool: Pool,
+  sql: string,
+  retries = 5,
+  delayMs = 500,
+) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await pool.query(sql);
+      return;
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      await new Promise((res) => setTimeout(res, delayMs));
+    }
+  }
+};
+
 export const setupTestContainers = async (): Promise<TestContainers> => {
   // -------- Postgres --------
   const pgContainer = await new GenericContainer('postgres:15')
@@ -62,7 +79,7 @@ export const setupTestContainers = async (): Promise<TestContainers> => {
 
   const schemaPath = path.join(__dirname, '../db/schema.sql');
   const schemaSql = fs.readFileSync(schemaPath, 'utf-8');
-  await pgPool.query(schemaSql);
+  await executeWithRetry(pgPool, schemaSql);
 
   return { pgContainer, redisContainer, pgPool, redisClient };
 };

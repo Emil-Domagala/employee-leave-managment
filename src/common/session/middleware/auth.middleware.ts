@@ -47,7 +47,6 @@ export class AuthMiddleware {
    * Runs requireAuth first, then checks role.
    */
   requireRole(minRole: RoleName) {
-    console.debug('requireRole:', minRole);
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         await this.requireAuth(req, res, async (err?: any) => {
@@ -55,11 +54,9 @@ export class AuthMiddleware {
 
           const userRole = req.user?.role as RoleName;
           if (!userRole) return next(new AccessDenied());
-
           if (RolePriority[userRole] < RolePriority[minRole]) {
             return next(new AccessDenied());
           }
-
           next();
         });
       } catch (e) {

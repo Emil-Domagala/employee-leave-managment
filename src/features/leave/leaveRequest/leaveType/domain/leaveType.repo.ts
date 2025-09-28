@@ -51,4 +51,11 @@ export class LeaveTypesRepository {
     const { rows } = await this.pool.query(sql, [id]);
     return rows[0] ?? null;
   }
+
+  async deleteById(id: string): Promise<void> {
+    await this.pool.query('DELETE FROM leave_types WHERE id = $1', [id]);
+  }
+  async deleteByName(name: string): Promise<void> {
+    await this.pool.query('DELETE FROM leave_types WHERE name = $1', [name]);
+  }
 }

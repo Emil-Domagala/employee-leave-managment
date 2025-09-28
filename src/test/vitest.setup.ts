@@ -1,16 +1,14 @@
 import { beforeAll, afterAll } from 'vitest';
-import {
-  setupTestContainers,
-  stopTestContainers,
-} from '../config/testDB';
+import { createTestApp, stopTestApp, app, containers } from '../app-test';
 
-export let containers: Awaited<ReturnType<typeof setupTestContainers>>;
+export { app, containers };
 
 beforeAll(async () => {
-  containers = await setupTestContainers();
-});
+  // Start test containers and app
+  await createTestApp();
+}, 60000);
 
 afterAll(async () => {
-  await stopTestContainers(containers);
-});
-
+  // Stop containers and clean up
+  await stopTestApp();
+}, 30000);

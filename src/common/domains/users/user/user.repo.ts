@@ -21,7 +21,19 @@ export class UsersRepository {
   }
 
   async deleteByEmail(email: string): Promise<void> {
-    await this.pool.query('DELETE FROM users WHERE email = $1', [email]);
+    const { rows } = await this.pool.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email],
+    );
+    const userId = rows[0]?.id;
+    if (!userId) return;
+
+    await this.pool.query(
+      'DELETE FROM compensations_history WHERE user_id = $1',
+      [userId],
+    );
+
+    await this.pool.query('DELETE FROM users WHERE id = $1', [userId]);
   }
 
   async create(u: Omit<User, 'id'>): Promise<User> {

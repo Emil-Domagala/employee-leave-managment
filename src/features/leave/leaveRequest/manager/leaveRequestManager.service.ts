@@ -2,6 +2,7 @@ import { EntityNotFoundError } from '../../../../common/errors/entityNotFoundErr
 import { UpdateLeaveRequestStatusBody } from '../domain/dto/updateLeaveRequestBody.dto';
 import { LeaveRequestStatus } from '../domain/leaveRequest.entity';
 import { LeaveRequestsRepository } from '../domain/leaveRequest.repo';
+import { LeaveRequestNotPendingError } from './errors/leaveRequestNotPendingError';
 
 export class LeaveRequestsManagerService {
   constructor(private leaveRequestsRepo: LeaveRequestsRepository) {}
@@ -14,7 +15,7 @@ export class LeaveRequestsManagerService {
     if (!lr) throw new EntityNotFoundError('Leave request not found');
 
     if (lr.status !== LeaveRequestStatus.Pending)
-      throw new Error('Only pending leave requests can be updated');
+      throw new LeaveRequestNotPendingError();
 
     const updated = await this.leaveRequestsRepo.updateStatus(
       id,

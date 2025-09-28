@@ -25,6 +25,7 @@ DO $$ BEGIN
     END IF;
 END $$;
 
+
 -- Tables
 CREATE TABLE IF NOT EXISTS roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -91,3 +92,10 @@ CREATE TABLE IF NOT EXISTS leave_payouts (
     currency CHAR(3) NOT NULL,
     compensation_history_id UUID REFERENCES compensations_history(id)
 );
+
+INSERT INTO roles (id, name)
+VALUES
+    (gen_random_uuid(), 'manager'),
+    (gen_random_uuid(), 'employee'),
+    (gen_random_uuid(), 'administrator')
+ON CONFLICT (name) DO NOTHING;

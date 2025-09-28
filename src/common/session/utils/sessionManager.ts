@@ -28,6 +28,7 @@ export class SessionManager {
    * Create a new session in Redis with expiration
    */
   public async createSession(data: CreateUserSesion): Promise<string> {
+  
     const token = this.generateToken();
 
     await this.redisClient.setEx(
