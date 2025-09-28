@@ -84,11 +84,13 @@ cd employee-leave-management
 npm install
 ```
 
-3. **Run the application with Docker Compose**
+3.1. **Run the application with Docker Compose**
 
 ```bash
 cd dev-docker && docker compose up -d --build
 ```
+
+3.2. **Do not forget to create .env **
 
 4. **Run the app locally in development mode**
 
@@ -96,7 +98,7 @@ cd dev-docker && docker compose up -d --build
 npm run dev
 ```
 
-5. Alternative: spin everything in Docker via npm
+6. Alternative: spin everything in Docker via npm
 
 ```bash
 npm run docker:up
