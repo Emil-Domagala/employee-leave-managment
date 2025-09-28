@@ -87,12 +87,12 @@ This project is licensed under the terms specified in the [LICENSE](./LICENSE) f
 
 ## REST API Contract
 
-See the full REST API documentation in REST_API_CONTRACT.md.
+See the full REST API documentation in [REST_API_CONTRACT](./doc/restContract/) .
 
 ## Testing
 
 npm run test
 
-
 ## Database Schema
-he database schema is visualized in the [doc](./dbSchema) file
+
+he database schema is visualized in the [doc](./doc/dbSchema.png) file
