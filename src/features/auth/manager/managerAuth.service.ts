@@ -7,7 +7,7 @@ import { CreateEmployeeBody } from './dto/createEmployee.dto';
 import { CompensationHistoryBody } from '../../compensation/compensationHistory/dto/CreateCompensationHistory.dto';
 import { CompensationHistoryService } from '../../compensation/compensationHistory/compensationHistory.service';
 import { CouldNotSaveEntityError } from '../../../common/errors/couldNotSaveEntityError';
-import { EmployeeEmailExistsError } from './errors/EmployeeEmailExistsError';
+import { EmployeeEmailExistsError } from './errors/employeeEmailExistsError';
 
 export class ManagerAuthService {
   constructor(
