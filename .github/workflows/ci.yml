@@ -51,10 +51,10 @@ jobs:
 
       - name: Run tests
         env:
-          DB_HOST: localhost
+          DB_HOST: postgres
           DB_PORT: 5432
           DB_USERNAME: myuser
           DB_PASSWORD: mypassword
           DB_DATABASE: mydb
-          REDIS_URL: redis://localhost:6379
+          REDIS_URL: redis://redis:6379
         run: npm test
